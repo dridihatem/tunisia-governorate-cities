@@ -16,6 +16,50 @@ msgstr ""
 msgid "Tunisia Governorate Cities requires WooCommerce to be installed and active."
 msgstr ""
 
+#: tunisia-governorate-cities.php:106
+msgid "<strong>Tunisia Governorate Cities</strong> is incompatible with WooCommerce High-Performance Order Storage (HPOS). Please disable HPOS in <a href=\"%s\">WooCommerce > Settings > Advanced > Features</a> to use this plugin."
+msgstr ""
+
+#: tunisia-governorate-cities.php:133
+msgid "Select City"
+msgstr ""
+
+#: tunisia-governorate-cities.php:134
+msgid "Error loading cities"
+msgstr ""
+
+#: tunisia-governorate-cities.php:547
+msgid "Please select a governorate."
+msgstr ""
+
+#: tunisia-governorate-cities.php:551
+msgid "Please select a city."
+msgstr ""
+
+#: tunisia-governorate-cities.php:575
+msgid "Billing Governorate"
+msgstr ""
+
+#: tunisia-governorate-cities.php:577
+msgid "Billing City"
+msgstr ""
+
+#: tunisia-governorate-cities.php:583
+msgid "Shipping Governorate"
+msgstr ""
+
+#: tunisia-governorate-cities.php:585
+msgid "Shipping City"
+msgstr ""
+
+#: tunisia-governorate-cities.php:147
+msgid "Search..."
+msgstr ""
+
+#: tunisia-governorate-cities.php:148
+msgid "No results found"
+msgstr ""
+
 #: tunisia-governorate-cities.php:75
 msgid "Governorate"
 msgstr ""

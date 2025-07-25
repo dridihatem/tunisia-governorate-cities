@@ -3,8 +3,8 @@
  * Plugin Name: Tunisia Governorate Cities for WooCommerce
  * Plugin URI: https://github.com/dridihatem/tunisia-governorate-cities
  * Description: Adds Tunisian governorates and cities dropdown to WooCommerce checkout with filtering functionality.
- * Version: 1.0.0
-     * Author: Dridi Hatem  
+ * Version: 1.0.3
+ * Author: Dridi Hatem  
  * Author URI: https://dridihatem.dawebcompany.tn
  * Text Domain: tunisia-governorate-cities
  * Domain Path: /languages
@@ -12,8 +12,16 @@
  * Tested up to: 6.4
  * WC requires at least: 5.0
  * WC tested up to: 8.0
+ * WC requires PHP: 7.4
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * 
+ * @package Tunisia_Governorate_Cities
+ * @since 1.0.0
+ * @version 1.0.3
+ * 
+ * Note: This plugin is incompatible with WooCommerce High-Performance Order Storage (HPOS).
+ * HPOS must be disabled for this plugin to function properly.
  */
 
 // Prevent direct access
@@ -24,7 +32,7 @@ if (!defined('ABSPATH')) {
 // Define plugin constants
 define('TGC_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('TGC_PLUGIN_PATH', plugin_dir_path(__FILE__));
-define('TGC_PLUGIN_VERSION', '1.0.0');
+define('TGC_PLUGIN_VERSION', '1.0.3');
 
 // Main plugin class
 class Tunisia_Governorate_Cities {
@@ -40,6 +48,12 @@ class Tunisia_Governorate_Cities {
         // Check if WooCommerce is active
         if (!class_exists('WooCommerce')) {
             add_action('admin_notices', array($this, 'woocommerce_missing_notice'));
+            return;
+        }
+        
+        // Check for WooCommerce HPOS (High-Performance Order Storage) compatibility
+        if ($this->is_hpos_enabled()) {
+            add_action('admin_notices', array($this, 'hpos_incompatibility_notice'));
             return;
         }
         
@@ -64,9 +78,86 @@ class Tunisia_Governorate_Cities {
              '</p></div>';
     }
     
+    /**
+     * Check if WooCommerce HPOS (High-Performance Order Storage) is enabled
+     */
+    public function is_hpos_enabled() {
+        // Check if HPOS is enabled via WooCommerce settings
+        if (class_exists('Automattic\WooCommerce\Utilities\FeaturesUtil')) {
+            // Use a safer method to check HPOS status
+            try {
+                // Check if the HPOS feature is enabled via options
+                $hpos_enabled = get_option('woocommerce_custom_orders_table_enabled', false);
+                if ($hpos_enabled) {
+                    return true;
+                }
+                
+                // Alternative check using WooCommerce settings
+                $wc_settings = get_option('woocommerce_settings_tab_advanced', array());
+                if (isset($wc_settings['custom_orders_table_enabled']) && $wc_settings['custom_orders_table_enabled'] === 'yes') {
+                    return true;
+                }
+            } catch (Exception $e) {
+                // If any error occurs, assume HPOS is not enabled
+                return false;
+            }
+        }
+        
+        // Fallback check for older WooCommerce versions
+        if (function_exists('wc_get_container')) {
+            try {
+                $data_store = wc_get_container()->get(\Automattic\WooCommerce\Internal\DataStores\Orders\OrdersTableDataStore::class);
+                return $data_store !== null;
+            } catch (Exception $e) {
+                return false;
+            }
+        }
+        
+        // Additional fallback: check if HPOS tables exist
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'wc_orders';
+        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name;
+        
+        if ($table_exists) {
+            // Check if HPOS is actually being used
+            $hpos_enabled = get_option('woocommerce_custom_orders_table_enabled', false);
+            return $hpos_enabled;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Display notice when HPOS is enabled
+     */
+    public function hpos_incompatibility_notice() {
+        $message = sprintf(
+            __('<strong>Tunisia Governorate Cities</strong> is incompatible with WooCommerce High-Performance Order Storage (HPOS). Please disable HPOS in <a href="%s">WooCommerce > Settings > Advanced > Features</a> to use this plugin.', 'tunisia-governorate-cities'),
+            admin_url('admin.php?page=wc-settings&tab=advanced&section=features')
+        );
+        
+        echo '<div class="error"><p>' . $message . '</p></div>';
+    }
+    
     public function enqueue_scripts() {
         if (is_checkout()) {
-            // Enqueue CSS
+            // Enqueue Select2 CSS and JS
+            wp_enqueue_style(
+                'select2',
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+                array(),
+                '4.1.0'
+            );
+            
+            wp_enqueue_script(
+                'select2',
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+                array('jquery'),
+                '4.1.0',
+                true
+            );
+            
+            // Enqueue plugin CSS
             wp_enqueue_style(
                 'tunisia-governorate-cities',
                 TGC_PLUGIN_URL . 'assets/css/tunisia-governorate-cities.css',
@@ -74,20 +165,23 @@ class Tunisia_Governorate_Cities {
                 TGC_PLUGIN_VERSION
             );
             
-            // Enqueue JavaScript
+            // Enqueue plugin JS
             wp_enqueue_script(
                 'tunisia-governorate-cities',
                 TGC_PLUGIN_URL . 'assets/js/tunisia-governorate-cities.js',
-                array('jquery'),
+                array('jquery', 'select2'),
                 TGC_PLUGIN_VERSION,
                 true
             );
             
+            // Localize script
             wp_localize_script('tunisia-governorate-cities', 'tgc_ajax', array(
                 'ajax_url' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('tgc_nonce'),
+                'nonce' => wp_create_nonce('tgc_ajax_nonce'),
                 'select_city' => __('Select City', 'tunisia-governorate-cities'),
-                'error_loading' => __('Error loading cities', 'tunisia-governorate-cities')
+                'error_loading' => __('Error loading cities', 'tunisia-governorate-cities'),
+                'select2_placeholder' => __('Search...', 'tunisia-governorate-cities'),
+                'no_results' => __('No results found', 'tunisia-governorate-cities')
             ));
         }
     }
@@ -115,11 +209,27 @@ class Tunisia_Governorate_Cities {
             'options' => array('' => __('Select Governorate First', 'tunisia-governorate-cities'))
         );
         
-        // Add shipping fields if different from billing
-        if (wc_ship_to_billing_address_only()) {
-            $fields['shipping']['shipping_governorate'] = $fields['billing']['billing_governorate'];
-            $fields['shipping']['shipping_city'] = $fields['billing']['billing_city'];
-        }
+        // Add shipping governorate field
+        $fields['shipping']['shipping_governorate'] = array(
+            'label' => __('Governorate', 'tunisia-governorate-cities'),
+            'placeholder' => __('Select Governorate', 'tunisia-governorate-cities'),
+            'required' => false,
+            'class' => array('form-row-wide'),
+            'clear' => true,
+            'type' => 'select',
+            'options' => $this->get_governorates()
+        );
+        
+        // Add shipping city field
+        $fields['shipping']['shipping_city'] = array(
+            'label' => __('City', 'tunisia-governorate-cities'),
+            'placeholder' => __('Select City', 'tunisia-governorate-cities'),
+            'required' => false,
+            'class' => array('form-row-wide'),
+            'clear' => true,
+            'type' => 'select',
+            'options' => array('' => __('Select Governorate First', 'tunisia-governorate-cities'))
+        );
         
         return $fields;
     }

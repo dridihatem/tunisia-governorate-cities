@@ -12,6 +12,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Development documentation
 - Contributing guidelines
 
+## [1.0.1] - 2024-01-XX
+
+### Added
+- HPOS (High-Performance Order Storage) compatibility check
+- Warning message when HPOS is enabled
+- Automatic plugin deactivation when HPOS is detected
+- Updated documentation with HPOS compatibility notes
+
+### Fixed
+- Plugin now properly handles WooCommerce HPOS incompatibility
+- Prevents plugin activation when HPOS is enabled to avoid conflicts
+
+## [1.0.2] - 2024-01-XX
+
+### Changed
+- Removed loading animation from city dropdown to improve performance
+- Simplified JavaScript code by removing loading states and animations
+- Updated CSS to remove loading spinner styles and animations
+
+### Added
+- Enhanced WordPress internationalization (i18n) support
+- Added all missing translatable strings to POT file
+- Improved translation coverage for validation messages and admin display
+
+## [1.0.3] - 2024-01-XX
+
+### Added
+- Integrated Select2 library for enhanced dropdown functionality
+- Searchable dropdowns for governorates and cities
+- Improved user experience with better dropdown interaction
+- Custom Select2 styling to match WooCommerce theme
+- Responsive design support for Select2 dropdowns
+- Dark theme and high contrast support for Select2
+- Accessibility improvements with proper ARIA labels
+
+### Changed
+- Updated JavaScript to initialize and manage Select2 dropdowns
+- Enhanced CSS with comprehensive Select2 styling
+- Improved dropdown performance and user interaction
+- Better mobile experience with touch-friendly dropdowns
+
 ## [1.0.0] - 2024-01-01
 
 ### Added

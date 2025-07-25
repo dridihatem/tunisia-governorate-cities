@@ -37,6 +37,15 @@ A WordPress plugin that adds Tunisian governorates and cities dropdown to WooCom
 - WooCommerce 5.0 or higher
 - PHP 7.4 or higher
 
+## Important Compatibility Note
+
+**This plugin is incompatible with WooCommerce High-Performance Order Storage (HPOS).**
+
+If you have HPOS enabled in your WooCommerce settings, you must disable it before using this plugin. HPOS can be disabled in:
+**WooCommerce > Settings > Advanced > Features > High-Performance Order Storage**
+
+The plugin will display a warning message if HPOS is detected and will not function until HPOS is disabled.
+
 ## Usage
 
 ### For Customers
@@ -117,6 +126,15 @@ add_filter('tgc_checkout_fields', 'my_custom_field_settings');
 1. **Fields not appearing**: Ensure WooCommerce is activated and you're on the checkout page
 2. **Cities not loading**: Check browser console for JavaScript errors
 3. **Validation errors**: Ensure both governorate and city are selected
+
+### HPOS Compatibility Error
+
+If you see a message about "High-Performance Order Storage" incompatibility:
+1. Go to **WooCommerce > Settings > Advanced > Features**
+2. Find "High-Performance Order Storage" 
+3. Toggle it to **Disabled**
+4. Save changes
+5. The plugin should now work normally
 
 ### Debug Mode
 

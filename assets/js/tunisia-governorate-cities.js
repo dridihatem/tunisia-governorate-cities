@@ -1,10 +1,25 @@
 jQuery(document).ready(function($) {
     'use strict';
     
+    // Initialize Select2 on all dropdowns
+    function initializeSelect2() {
+        $('#billing_governorate, #shipping_governorate, #billing_city, #shipping_city').select2({
+            placeholder: tgc_ajax.select2_placeholder || 'Search...',
+            allowClear: true,
+            width: '100%',
+            language: {
+                noResults: function() {
+                    return tgc_ajax.no_results || 'No results found';
+                }
+            }
+        });
+    }
+    
     // Function to update city dropdown
     function updateCityDropdown(governorate, targetField) {
         if (!governorate) {
-            $(targetField).html('<option value="">' + tgc_ajax.select_city || 'Select City' + '</option>');
+            $(targetField).html('<option value="">' + (tgc_ajax.select_city || 'Select City') + '</option>');
+            $(targetField).trigger('change');
             return;
         }
         
@@ -23,50 +38,50 @@ jQuery(document).ready(function($) {
                         options += '<option value="' + key + '">' + value + '</option>';
                     });
                     $(targetField).html(options);
+                    $(targetField).trigger('change');
+                } else {
+                    $(targetField).html('<option value="">' + (tgc_ajax.error_loading || 'Error loading cities') + '</option>');
+                    $(targetField).trigger('change');
                 }
             },
             error: function() {
-                console.error('Error loading cities');
+                $(targetField).html('<option value="">' + (tgc_ajax.error_loading || 'Error loading cities') + '</option>');
+                $(targetField).trigger('change');
             }
         });
     }
     
+    // Initialize Select2 when page loads
+    initializeSelect2();
+    
     // Handle governorate change for billing
-    $(document.body).on('change', '#billing_governorate', function() {
+    $('#billing_governorate').on('change', function() {
         var governorate = $(this).val();
         updateCityDropdown(governorate, '#billing_city');
-        
-        // Clear city field when governorate changes
-        $('#billing_city').val('');
     });
     
     // Handle governorate change for shipping
-    $(document.body).on('change', '#shipping_governorate', function() {
+    $('#shipping_governorate').on('change', function() {
         var governorate = $(this).val();
         updateCityDropdown(governorate, '#shipping_city');
-        
-        // Clear city field when governorate changes
-        $('#shipping_city').val('');
     });
     
     // Handle "ship to different address" checkbox
-    $(document.body).on('change', '#ship-to-different-address-checkbox', function() {
+    $('input[name="ship_to_different_address"]').on('change', function() {
         if ($(this).is(':checked')) {
-            // When shipping to different address is checked, copy billing governorate to shipping
-            var billingGovernorate = $('#billing_governorate').val();
-            if (billingGovernorate) {
-                $('#shipping_governorate').val(billingGovernorate);
-                updateCityDropdown(billingGovernorate, '#shipping_city');
-            }
-        }
-    });
-    
-    // Handle billing governorate change when shipping to different address
-    $(document.body).on('change', '#billing_governorate', function() {
-        if ($('#ship-to-different-address-checkbox').is(':checked')) {
-            var governorate = $(this).val();
-            $('#shipping_governorate').val(governorate);
-            updateCityDropdown(governorate, '#shipping_city');
+            // Re-initialize Select2 for shipping fields when they become visible
+            setTimeout(function() {
+                $('#shipping_governorate, #shipping_city').select2({
+                    placeholder: tgc_ajax.select2_placeholder || 'Search...',
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() {
+                            return tgc_ajax.no_results || 'No results found';
+                        }
+                    }
+                });
+            }, 100);
         }
     });
     
@@ -84,116 +99,26 @@ jQuery(document).ready(function($) {
         }
     }
     
-    // Run initialization after a short delay to ensure DOM is ready
-    setTimeout(initializeCityDropdowns, 500);
+    // Initialize on page load
+    initializeCityDropdowns();
     
-    // Also run initialization when checkout form is updated
-    $(document.body).on('updated_checkout', function() {
-        setTimeout(initializeCityDropdowns, 100);
-    });
-    
-    // Add validation for city field
-    $(document.body).on('checkout_error', function() {
-        // Re-initialize city dropdowns after checkout error
-        setTimeout(initializeCityDropdowns, 100);
-    });
-    
-    // Add custom validation
-    $(document.body).on('checkout_place_order', function() {
+    // Client-side validation
+    $('form.checkout').on('checkout_place_order', function() {
         var billingGovernorate = $('#billing_governorate').val();
         var billingCity = $('#billing_city').val();
-        var shippingGovernorate = $('#shipping_governorate').val();
-        var shippingCity = $('#shipping_city').val();
         
-        // Validate billing fields
         if (!billingGovernorate) {
-            $('html, body').animate({
-                scrollTop: $('#billing_governorate').offset().top - 100
-            }, 500);
+            $('.woocommerce-error').remove();
+            $('form.checkout').prepend('<div class="woocommerce-error">Please select a governorate.</div>');
             return false;
         }
         
         if (!billingCity) {
-            $('html, body').animate({
-                scrollTop: $('#billing_city').offset().top - 100
-            }, 500);
+            $('.woocommerce-error').remove();
+            $('form.checkout').prepend('<div class="woocommerce-error">Please select a city.</div>');
             return false;
         }
         
-        // Validate shipping fields if shipping to different address
-        if ($('#ship-to-different-address-checkbox').is(':checked')) {
-            if (!shippingGovernorate) {
-                $('html, body').animate({
-                    scrollTop: $('#shipping_governorate').offset().top - 100
-                }, 500);
-                return false;
-            }
-            
-            if (!shippingCity) {
-                $('html, body').animate({
-                    scrollTop: $('#shipping_city').offset().top - 100
-                }, 500);
-                return false;
-            }
-        }
-    });
-    
-    // Add loading indicator
-    function showLoading(field) {
-        $(field).addClass('loading');
-        $(field).prop('disabled', true);
-    }
-    
-    function hideLoading(field) {
-        $(field).removeClass('loading');
-        $(field).prop('disabled', false);
-    }
-    
-    // Enhanced updateCityDropdown with loading indicator
-    function updateCityDropdownWithLoading(governorate, targetField) {
-        if (!governorate) {
-            $(targetField).html('<option value="">' + (tgc_ajax.select_city || 'Select City') + '</option>');
-            return;
-        }
-        
-        showLoading(targetField);
-        
-        $.ajax({
-            url: tgc_ajax.ajax_url,
-            type: 'POST',
-            data: {
-                action: 'get_cities',
-                governorate: governorate,
-                nonce: tgc_ajax.nonce
-            },
-            success: function(response) {
-                if (response.success) {
-                    var options = '<option value="">' + (tgc_ajax.select_city || 'Select City') + '</option>';
-                    $.each(response.data, function(key, value) {
-                        options += '<option value="' + key + '">' + value + '</option>';
-                    });
-                    $(targetField).html(options);
-                }
-                hideLoading(targetField);
-            },
-            error: function() {
-                console.error('Error loading cities');
-                hideLoading(targetField);
-                $(targetField).html('<option value="">' + (tgc_ajax.error_loading || 'Error loading cities') + '</option>');
-            }
-        });
-    }
-    
-    // Replace the original updateCityDropdown calls with the enhanced version
-    $(document.body).off('change', '#billing_governorate').on('change', '#billing_governorate', function() {
-        var governorate = $(this).val();
-        updateCityDropdownWithLoading(governorate, '#billing_city');
-        $('#billing_city').val('');
-    });
-    
-    $(document.body).off('change', '#shipping_governorate').on('change', '#shipping_governorate', function() {
-        var governorate = $(this).val();
-        updateCityDropdownWithLoading(governorate, '#shipping_city');
-        $('#shipping_city').val('');
+        return true;
     });
 }); 
