@@ -1,0 +1,173 @@
+# Copyright (C) 2024 Tunisia Governorate Cities for WooCommerce
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Tunisia Governorate Cities for WooCommerce 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/tunisia-governorate-cities\n"
+"POT-Creation-Date: 2024-01-01 12:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"Last-Translator: DRIDI HATEM <DRIDIHATEM@GMAIL.COM>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: tunisia-governorate-cities.php:45
+msgid "Tunisia Governorate Cities requires WooCommerce to be installed and active."
+msgstr ""
+
+#: tunisia-governorate-cities.php:75
+msgid "Governorate"
+msgstr ""
+
+#: tunisia-governorate-cities.php:76
+msgid "Select Governorate"
+msgstr ""
+
+#: tunisia-governorate-cities.php:85
+msgid "City"
+msgstr ""
+
+#: tunisia-governorate-cities.php:86
+msgid "Select City"
+msgstr ""
+
+#: tunisia-governorate-cities.php:91
+msgid "Select Governorate First"
+msgstr ""
+
+#: tunisia-governorate-cities.php:108
+msgid "Select Governorate"
+msgstr ""
+
+#: tunisia-governorate-cities.php:109
+msgid "Ariana"
+msgstr ""
+
+#: tunisia-governorate-cities.php:110
+msgid "Béja"
+msgstr ""
+
+#: tunisia-governorate-cities.php:111
+msgid "Ben Arous"
+msgstr ""
+
+#: tunisia-governorate-cities.php:112
+msgid "Bizerte"
+msgstr ""
+
+#: tunisia-governorate-cities.php:113
+msgid "Gabès"
+msgstr ""
+
+#: tunisia-governorate-cities.php:114
+msgid "Gafsa"
+msgstr ""
+
+#: tunisia-governorate-cities.php:115
+msgid "Jendouba"
+msgstr ""
+
+#: tunisia-governorate-cities.php:116
+msgid "Kairouan"
+msgstr ""
+
+#: tunisia-governorate-cities.php:117
+msgid "Kasserine"
+msgstr ""
+
+#: tunisia-governorate-cities.php:118
+msgid "Kébili"
+msgstr ""
+
+#: tunisia-governorate-cities.php:119
+msgid "Le Kef"
+msgstr ""
+
+#: tunisia-governorate-cities.php:120
+msgid "Mahdia"
+msgstr ""
+
+#: tunisia-governorate-cities.php:121
+msgid "Manouba"
+msgstr ""
+
+#: tunisia-governorate-cities.php:122
+msgid "Médenine"
+msgstr ""
+
+#: tunisia-governorate-cities.php:123
+msgid "Monastir"
+msgstr ""
+
+#: tunisia-governorate-cities.php:124
+msgid "Nabeul"
+msgstr ""
+
+#: tunisia-governorate-cities.php:125
+msgid "Sfax"
+msgstr ""
+
+#: tunisia-governorate-cities.php:126
+msgid "Sidi Bouzid"
+msgstr ""
+
+#: tunisia-governorate-cities.php:127
+msgid "Siliana"
+msgstr ""
+
+#: tunisia-governorate-cities.php:128
+msgid "Sousse"
+msgstr ""
+
+#: tunisia-governorate-cities.php:129
+msgid "Tataouine"
+msgstr ""
+
+#: tunisia-governorate-cities.php:130
+msgid "Tozeur"
+msgstr ""
+
+#: tunisia-governorate-cities.php:131
+msgid "Tunis"
+msgstr ""
+
+#: tunisia-governorate-cities.php:132
+msgid "Zaghouan"
+msgstr ""
+
+#: tunisia-governorate-cities.php:350
+msgid "Select City"
+msgstr ""
+
+#: tunisia-governorate-cities.php:360
+msgid "Please select a governorate."
+msgstr ""
+
+#: tunisia-governorate-cities.php:364
+msgid "Please select a city."
+msgstr ""
+
+#: tunisia-governorate-cities.php:385
+msgid "Billing Governorate"
+msgstr ""
+
+#: tunisia-governorate-cities.php:387
+msgid "Billing City"
+msgstr ""
+
+#: tunisia-governorate-cities.php:393
+msgid "Shipping Governorate"
+msgstr ""
+
+#: tunisia-governorate-cities.php:395
+msgid "Shipping City"
+msgstr ""
+
+#: tunisia-governorate-cities.php:65
+msgid "Select City"
+msgstr ""
+
+#: tunisia-governorate-cities.php:66
+msgid "Error loading cities"
+msgstr "" 

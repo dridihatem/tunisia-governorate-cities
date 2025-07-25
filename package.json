@@ -1,0 +1,42 @@
+{
+  "name": "tunisia-governorate-cities",
+  "version": "1.0.0",
+  "description": "WordPress plugin for WooCommerce checkout with Tunisian governorates and cities",
+  "main": "tunisia-governorate-cities.php",
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "sass assets/css/tunisia-governorate-cities.scss:assets/css/tunisia-governorate-cities.min.css --style compressed",
+    "build:js": "uglifyjs assets/js/tunisia-governorate-cities.js -o assets/js/tunisia-governorate-cities.min.js",
+    "watch": "npm run watch:css & npm run watch:js",
+    "watch:css": "sass --watch assets/css/tunisia-governorate-cities.scss:assets/css/tunisia-governorate-cities.min.css",
+    "watch:js": "nodemon --watch assets/js/tunisia-governorate-cities.js --exec 'npm run build:js'",
+    "lint": "eslint assets/js/*.js",
+    "lint:fix": "eslint assets/js/*.js --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "woocommerce",
+    "tunisia",
+    "governorate",
+    "cities",
+    "checkout"
+  ],
+  "author": "Dridi Hatem <dridihatem@gmail.com>",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "nodemon": "^2.0.0",
+    "sass": "^1.45.0",
+    "uglify-js": "^3.14.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/tunisia-governorate-cities.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/tunisia-governorate-cities/issues"
+  },
+  "homepage": "https://github.com/yourusername/tunisia-governorate-cities#readme"
+} 

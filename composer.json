@@ -1,0 +1,56 @@
+{
+    "name": "tunisia-governorate-cities/woocommerce",
+    "description": "A WordPress plugin that adds Tunisian governorates and cities dropdown to WooCommerce checkout with dynamic filtering functionality.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "keywords": [
+        "wordpress",
+        "plugin",
+        "woocommerce",
+        "tunisia",
+        "governorate",
+        "cities",
+        "checkout"
+    ],
+    "authors": [
+        {
+            "name": "Dridi Hatem",
+            "email": "dridihatem@gmail.com",
+            "homepage": "https://dridihatem.dawebcompany.tn"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "composer/installers": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "squizlabs/php_codesniffer": "^3.0",
+        "wp-coding-standards/wpcs": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "TunisiaGovernorateCities\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TunisiaGovernorateCities\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "phpcs": "phpcs --standard=WordPress",
+        "phpcbf": "phpcbf --standard=WordPress"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "extra": {
+        "installer-name": "tunisia-governorate-cities"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+} 
